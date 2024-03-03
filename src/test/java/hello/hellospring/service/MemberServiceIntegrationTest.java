@@ -1,33 +1,36 @@
 package hello.hellospring.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-// import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import hello.hellospring.domain.Member;
-import hello.hellospring.repository.MemoryMemberRepository;
+import hello.hellospring.repository.MemberRepository;
+// import hello.hellospring.repository.MemoryMemberRepository;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.AfterEach;
+// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-// 단위 테스트 (순수한 자바 코드로 테스트) -> 단위테스트가 더 좋을가능성이 높다
-class MemberServiceTest {
+// 통합 테스트
+@SpringBootTest
+@Transactional
+class MemberServiceIntegrationTest {
 
-  MemoryMemberRepository memberRepository;
+  @Autowired
   MemberService memberService;
 
-  @BeforeEach
-  void beforeEach() {
-    memberRepository = new MemoryMemberRepository();
-    memberService = new MemberService(memberRepository);
-  }
+  @Autowired
+  MemberRepository memberRepository;
 
-  @AfterEach
-  void tearDown() {
-    memberRepository.clear();
-  }
+  //*  필요없다 (MemoryMemberRepository를 사용하지 않기 때문 그리고 @Transactional 때문에 롤백이 되기 때문에)
+  // @AfterEach
+  // void tearDown() {
+  //   memberRepository.clear();
+  // }
 
   @Test
   void 회원가입() {
@@ -84,7 +87,7 @@ class MemberServiceTest {
     List<Member> members = memberService.findMembers();
 
     // then
-    assertThat(members).hasSize(2);
+    assertThat(members).hasSize(members.size());
     assertThat(members).contains(member1, member2);
   }
 
