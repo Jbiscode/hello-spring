@@ -1,5 +1,6 @@
 package hello.hellospring;
 
+import hello.hellospring.aop.TimeTraceAop;
 import hello.hellospring.repository.JdbcTemplateMemberRepository;
 import hello.hellospring.repository.JpaMemberRepository;
 import hello.hellospring.repository.MemberRepository;
@@ -57,5 +58,12 @@ public class SpringConfig {
     @Bean
     MemberService memberService() {
         return new MemberService(memberRepository);
+    }
+
+
+    // component scan을 사용하여 스프링 빈을 등록할 수 있지만, 이 방법을 선호한다.(분리되어 있어서 좋다.)
+    @Bean
+    public TimeTraceAop timeTraceAop() {
+        return new TimeTraceAop();
     }
 }
